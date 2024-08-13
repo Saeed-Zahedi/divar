@@ -1,0 +1,135 @@
+create database final;
+
+create table final.user(
+UID int auto_increment,
+name char(16) ,
+lastname char(16),
+email char(32),
+telNo char(32),
+postNo int,
+CID int,
+UStatus bool,
+foreign key (CID) references city (CID),
+primary key (UID)
+);
+
+create table final.Admin(
+AID int auto_increment,
+password char(32),
+name char(16),
+lastname char(16),
+email char(32),
+telNo char(16),
+primary key (AID)
+);
+
+create table final.post(
+PID int auto_increment,
+title char(32),
+body char(128),
+viewNo int,
+OwnerId int,
+BTID int,
+date date,
+IsUser bool,	
+AddressId int,
+poststatus bool,
+price char(32),
+meta json,
+primary key (PID),
+foreign key (BTID) references bussinesstype (BTID),
+foreign key (AddressID) references address (AddressId)
+);
+
+create table final.city(
+CID int auto_increment,
+name char(16),
+PID int,
+primary key (CID),
+foreign key (PID) references province (PID)
+);
+
+create table final.province(
+PID int auto_increment,
+name char(16),
+primary key (PID)
+);
+
+create table final.address(
+addressId int auto_increment,
+CID int,
+PID int,
+primary key (addressId),
+foreign key (CID) references city (CID),
+foreign key (PID) references province (PID)
+);
+
+create table final.photo(
+PHID int auto_increment,
+postId int,
+content blob,
+primary key (PHID),
+foreign key (postId) references post (PID)
+);
+
+create table final.userstatus(
+USID int auto_increment,
+AdminId int,
+status bool,
+UID int,
+primary key (USID),
+foreign key (AdminId) references Admin (AID),
+foreign key (UID) references user (UID)
+);
+
+create table final.reporttype(
+RTID int auto_increment,
+name char(32),
+primary key (RTID)
+);
+
+create table final.report(
+RID int auto_increment,
+PID int,
+descripition char(128),
+RTID int,
+AdminId int,
+UID int,
+RStatus bool,
+primary key (RID),
+foreign key (PID) references post (PID),
+foreign key (AdminId) references Admin (AID), 
+foreign key (UID) references user (UID)
+);
+
+create table final.bussiness(
+BID int auto_increment,
+addressId int,
+name char(32),
+bussinessNo int,
+BTID int,
+UID int,
+primary key (BID),
+foreign key (UID) references user (UID),
+foreign key (BTID) references bussinesstype (BTID),
+foreign key (addressId) references address (addressId)
+);
+
+create table final.poststatus(
+PSID int auto_increment,
+PID int,
+note char(128),
+Pstatus bool,
+date date,
+AdminId int,
+primary key (PSID),
+foreign key (PID) references post (PID),
+foreign key (AdminId) references Admin (AID)
+);
+
+create table final.bussinesstype(
+BTID int auto_increment,
+name char (16),
+primary key (BTID)
+);
+
